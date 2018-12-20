@@ -5,14 +5,13 @@ socket.on('connect', function() {
 }).on('infoUpdate', function(resp) {
     console.log(resp)
     // got access { error: 'Access denied' } apparently couldn't get any data but this should update the property
-    app.stats = resp.body
+    app.stats = resp.data
 })
 
 
 let app = new Vue({
     el: '#app',
     data: {
-        message: 'Hello',
         stats: {
             deviceStats: { 
                 jplPrinters: { title: 'Open JetDirect printers', count: 0 },
@@ -152,6 +151,15 @@ let app = new Vue({
     },
     created () {
     },
+    watch: {
+        stats: {
+            handler: function(val, oldVal) {
+                Highcharts.chart('devices-container', this.devicesChartData)
+                Highcharts.chart('countries-container', this.countriesChartData)
+            },
+            deep: true
+        }
+    }, 
     mounted: function () {
         Highcharts.chart('devices-container', this.devicesChartData)
         Highcharts.chart('countries-container', this.countriesChartData)
