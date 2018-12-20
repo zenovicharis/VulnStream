@@ -37,7 +37,7 @@
             <!-- Header Section END -->
         </div>
         <div class="container" style="box-shadow: 0px 0px 10px #bbbbbb;">
-            <div class="row">
+            <div class="row" v-if="stats">
                 <!-- Devices Section -->
                 <div class="col-6">
                     <h2 class="text-center">Devices</h2>
@@ -82,6 +82,11 @@
                     </table>
                 </div>
                 <!-- Countries Section END -->
+            </div>
+            <div class="row" v-else>
+                <div class="col-12 text-center">
+                    <h3>No data provided by socket.io</h3>
+                </div>
             </div>
         </div>
     </div>
