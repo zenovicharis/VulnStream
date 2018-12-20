@@ -1,9 +1,92 @@
 <html>
-    <head>
-        <title>VulnStream - Real vulnerable devices in real time.</title>
-        <script src="/socket.io/socket.io.js"></script>
-    </head>
-    <body>
-        <script src="/index.js"></script>
-    </body>
+
+<head>
+    <title>VulnStream - Real vulnerable devices in real time.</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container-fluid">
+            <!-- Header Section -->
+            <div class="row">
+                <div class="col-12 p-0">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <a class="navbar-brand" href="#">VulnStream</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">Main <span class="sr-only">(current)</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- Header Section END -->
+        </div>
+        <div class="container" style="box-shadow: 0px 0px 10px #bbbbbb;">
+            <div class="row">
+                <!-- Devices Section -->
+                <div class="col-6">
+                    <h2 class="text-center">Devices</h2>
+                    <div class="col-12" id="devices-container">
+
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Device</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="stat in devicesStats">
+                                <td>{{stat.title}}</td>
+                                <td>{{stat.count}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Devices Section END -->
+                <!-- Countries Section -->
+                <div class="col-6">
+                    <h2 class="text-center">Countries</h2>
+                    <div class="col-12" id="countries-container">
+
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Country</th>
+                                <th scope="col">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="stat in countriesStats">
+                                <td>{{stat.title}}</td>
+                                <td>{{stat.count}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Countries Section END -->
+            </div>
+        </div>
+    </div>
+    <!-- This may create problem to you since I was working on it locally -->
+    <script src="index.js"></script>
+</body>
+
 </html>
