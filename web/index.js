@@ -1,15 +1,15 @@
 const socket = io();
-// const Highcharts = Highcharts();
-// socket.on('connect', function() {
-//     console.log('Connected to server!');
-// })
 
-// socket.on('infoUpdate', function(data) {
-//     console.log(data);
-// })
+socket.on('connect', function() {
+    console.log('Connected to server!');
+}).on('infoUpdate', function(resp) {
+    console.log(resp)
+    // got access { error: 'Access denied' } apparently couldn't get any data but this should update the property
+    app.stats = resp.body
+})
 
 
-new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         message: 'Hello',
@@ -62,6 +62,7 @@ new Vue({
                 },
                 xAxis: {
                     type: 'Device',
+                    categories: this.devicesStats.map(d => d.title),
                     labels: {
                         rotation: -45
                     }
@@ -111,6 +112,7 @@ new Vue({
                 },
                 xAxis: {
                     type: 'Country',
+                    categories: this.countriesStats.map(d => d.title),
                     labels: {
                         rotation: -45
                     }
@@ -148,23 +150,7 @@ new Vue({
             }
         }
     },
-    asyncComputed: {
-        // handly async calls here
-    },
     created () {
-        // 
-        // This is where you want to trigger sockets ON 
-        // you may move `stats` from data object and move 
-        // it into asyncComputed propery of Vue object
-        // where you can handle async calls 
-        //
-        // socket.on('connect', function() {
-        //     console.log('Connected to server!');
-        // })
-        
-        // socket.on('infoUpdate', function(data) {
-        //     console.log(data);
-        // })
     },
     mounted: function () {
         Highcharts.chart('devices-container', this.devicesChartData)

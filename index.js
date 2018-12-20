@@ -86,6 +86,7 @@ let stats = {
 hyperquest(`https://stream.shodan.io/shodan/banners?key=${config.shodan.API_KEY}`)
     .pipe(ndjson.parse())
     .on('data', (item) => {
+        console.log(item)
         //Alright, prepare yourself for a crapload of if statements and regex
         
         //A boolean to check if the device was vulnerable in any way
@@ -160,7 +161,7 @@ hyperquest(`https://stream.shodan.io/shodan/banners?key=${config.shodan.API_KEY}
         }
 
         //General vulnerabilities
-        if (item.vulns || item.opts.vulns) {
+        if (item.vulns || item.opts) { // this line is making error in `item.opts.vulns`
             stats.deviceStats.vulnerableDevices.count++;
             wasVulnerable = true;
         }
