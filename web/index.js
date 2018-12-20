@@ -43,25 +43,30 @@ let app = new Vue({
     },
     computed: {
         devicesStats () {
-            return Object.keys(this.stats.deviceStats).map(key => this.stats.deviceStats[key])
+            if (this.stats != null) {
+                return Object.keys(this.stats.deviceStats).map(key => this.stats.deviceStats[key])
+            }
+            return []
         },
         countriesStats () {
-            return Object.keys(this.stats.countryStats).map(key => {return {title: key, count: this.stats.countryStats[key]}})
-        },
-        devicesChartData () {
+            if (this.stats != null) {
+                return Object.keys(this.stats.countryStats).map(key => {return {title: key, count: this.stats.countryStats[key]}})
+            }
+            return []
+        }
+    },
+    methods: {
+        getChartData (data, title) {
             return {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: 'Vulnerable Devices'
-                },
-                subtitle: {
-                    text: ''
+                    text: title
                 },
                 xAxis: {
                     type: 'Device',
-                    categories: this.devicesStats.map(d => d.title),
+                    categories: data.map(d => d.title),
                     labels: {
                         rotation: -45
                     }
@@ -78,58 +83,8 @@ let app = new Vue({
                     series: {
                         borderWidth: 0,
                         dataLabels: {
-                        enabled: true,
-                        format: '{point.y}'
-                        }
-                    }
-                },
-            
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
-                },
-            
-                "series": [
-                    {
-                        "name": "Devices",
-                        "colorByPoint": true,
-                        "data": this.devicesStats.map(d => [ d.title, d.count]) 
-                    }
-                ]
-            }
-        },
-        countriesChartData () {
-            return {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Countries'
-                },
-                subtitle: {
-                    text: ''
-                },
-                xAxis: {
-                    type: 'Country',
-                    categories: this.countriesStats.map(d => d.title),
-                    labels: {
-                        rotation: -45
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: 'Count'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                        enabled: true,
-                        format: '{point.y}'
+                            enabled: true,
+                            format: '{point.y}'
                         }
                     }
                 },
@@ -141,28 +96,30 @@ let app = new Vue({
             
                 "series": [
                     {
-                        "name": "Devices",
+                        "name": '',
                         "colorByPoint": true,
-                        "data": this.countriesStats.map(d => [ d.title, d.count])
+                        "data": data.map(d => [ d.title, d.count]) 
                     }
                 ]
             }
         }
     },
-    created () {
-    },
     watch: {
         stats: {
             handler: function(val, oldVal) {
-                Highcharts.chart('devices-container', this.devicesChartData)
-                Highcharts.chart('countries-container', this.countriesChartData)
+                if (val != null) {
+                    Highcharts.chart('devices-container', this.getChartData(this.devicesStats))
+                    Highcharts.chart('countries-container', this.getChartData(this.countriesStats))
+                }
             },
             deep: true
         }
     }, 
     mounted: function () {
-        Highcharts.chart('devices-container', this.devicesChartData)
-        Highcharts.chart('countries-container', this.countriesChartData)
+        if (this.stats != null) {
+            Highcharts.chart('devices-container', this.getChartData(this.devicesStats))
+            Highcharts.chart('countries-container', this.getChartData(this.countriesStats))
+        }
     }
 })
 
